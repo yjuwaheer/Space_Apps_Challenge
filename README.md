@@ -1,5 +1,9 @@
 # TODO
-- Add username in signup and also to firestore.
+[*] Add username in signup and also to firestore.
+[] Filter functionality.
+[] Modal for log.
+[] Single Page for log.
+[] User Account update functionality.
 
 # Getting Started with Create React App
 

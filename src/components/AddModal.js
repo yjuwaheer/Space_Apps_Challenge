@@ -3,9 +3,9 @@ import "../styles/AddModal.css";
 // Firebase Config
 import { db, storage, serverTimestamp } from "../FirebaseConfig";
 // Firebase Firestore Library
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, doc, updateDoc } from "firebase/firestore";
 // Firebase Storage Library
-import { ref, uploadBytes } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 // Chakra Components
 import {
     Button,
@@ -42,6 +42,8 @@ const AddModal = ({ isOpen, onClose }) => {
     const [linkLogs, setLinkLogs] = useState("");
     const [newFieldName, setNewFieldName] = useState("");
     const [newFieldText, setNewFieldText] = useState("");
+
+    const [loading, setLoading] = useState(false);
 
     // Function to handle adding new field
     const handleAddNewField = () => {
@@ -103,11 +105,17 @@ const AddModal = ({ isOpen, onClose }) => {
         setNewFields(copyNewFields);
     };
 
-    // Function to reset new fields completely (When modal is closed)
-    const resetNewFields = () => {
+    // Function to reset the log form completely (When modal is closed / Log recorder)
+    const resetFields = () => {
         setNewFields([]);
         setNewFieldName("");
         setNewFieldText("");
+
+        setEntryTopic("");
+        setLogEntry("");
+        setTags([]);
+        setAdditionalNotes("");
+        setLinkLogs("");
     };
 
     // Function to create log entry and save to database after approval from user
@@ -125,6 +133,9 @@ const AddModal = ({ isOpen, onClose }) => {
             });
             return;
         }
+
+        // Set loading to true
+        setLoading(true);
 
         // Save log to firestore
         const docRef = await addDoc(collection(db, "logs"), {
@@ -155,7 +166,13 @@ const AddModal = ({ isOpen, onClose }) => {
         } else {
             // "Supporting files."
             // console.log(docRef.path.split("/")[1]);
-            await handleSupportingFiles(docRef.path.split("/")[1]);
+            const filesDownloadUrl = await handleSupportingFiles(
+                docRef.path.split("/")[1]
+            );
+            await updateDocSupportingFiles(
+                docRef.path.split("/")[1],
+                filesDownloadUrl
+            );
 
             toast.success("Log successfully recorded.", {
                 position: "bottom-center",
@@ -167,10 +184,15 @@ const AddModal = ({ isOpen, onClose }) => {
                 progress: undefined,
             });
         }
+
+        // Set loading back to false
+        setLoading(false);
+        resetFields();
     };
 
     // Function to handle upload of supporting files
     const handleSupportingFiles = async (documentId) => {
+        const filesDownloadUrl = [];
         let fileInputRef = document.getElementById("supportingFiles");
 
         // Cycle through the files
@@ -183,6 +205,13 @@ const AddModal = ({ isOpen, onClose }) => {
             try {
                 // console.log("Uploaded supporting file " + index);
                 await uploadBytes(fileRef, fileInputRef.files[index]);
+
+                // Gets the download URL for each successful supporting doc uploaded
+                let url = await getDownloadURL(fileRef);
+                filesDownloadUrl.push({
+                    fileName: fileInputRef.files[index].name,
+                    url: url,
+                });
             } catch (error) {
                 toast.error(
                     "Error occurred while uploading supporting files.",
@@ -198,13 +227,25 @@ const AddModal = ({ isOpen, onClose }) => {
                 );
             }
         }
+
+        return filesDownloadUrl;
+    };
+
+    // Function to update document to point to supporting files if present
+    const updateDocSupportingFiles = async (documentId, filesDownloadUrl) => {
+        const docRef = doc(db, "logs", documentId);
+
+        // Set the download urls for the supporting files
+        await updateDoc(docRef, {
+            supportingFiles: filesDownloadUrl,
+        });
     };
 
     return (
         <Modal
             isOpen={isOpen}
             onClose={() => {
-                resetNewFields();
+                resetFields();
                 onClose();
             }}
         >
@@ -354,7 +395,7 @@ const AddModal = ({ isOpen, onClose }) => {
                         colorScheme="red"
                         mr={3}
                         onClick={() => {
-                            resetNewFields();
+                            resetFields();
                             onClose();
                         }}
                     >
@@ -364,6 +405,7 @@ const AddModal = ({ isOpen, onClose }) => {
                         colorScheme="green"
                         variant="outline"
                         onClick={createLogEntry}
+                        isLoading={loading}
                     >
                         Approve
                     </Button>

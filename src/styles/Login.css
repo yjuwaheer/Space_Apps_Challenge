@@ -1,0 +1,99 @@
+.container {
+    background: var(--auth-bg);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container .login {
+    background: var(--white-col);
+    padding: 20px;
+    border-radius: 15px;
+    width: 300px;
+}
+
+.container .login .mainText {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+.container .login .email {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.container .login .email label {
+    font-size: 0.9rem;
+}
+
+.container .login .email input {
+    height: 30px;
+    padding: 0 3px;
+    border: 1px solid var(--black-col);
+    border-radius: 3px;
+    outline: none;
+}
+
+.container .login .email input:focus {
+    border: 1px solid var(--auth-accent);
+}
+
+.container .login .password {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.container .login .password label {
+    font-size: 0.9rem;
+}
+
+.container .login .password input {
+    height: 30px;
+    padding: 0 3px;
+    border: 1px solid #000000;
+    border-radius: 3px;
+    outline: none;
+}
+
+.container .login .password input:focus {
+    border: 1px solid var(--auth-accent);
+}
+
+.container .login .button {
+    background: var(--auth-accent);
+    color: var(--white-col);
+    font-weight: 600;
+    text-align: center;
+    border-radius: 5px;
+    padding: 8px 0;
+    width: 100%;
+    outline: none;
+    border: none;
+    margin-bottom: 20px;
+}
+
+.container .login .button:hover {
+    cursor: pointer;
+    background: var(--auth-accent-hover);
+}
+
+.container .login .signupRedirect {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container .login .signupRedirect .text {
+    font-size: 0.8rem;
+}
+
+.container .login .signupRedirect .redirect {
+    color: var(--black-col);
+    font-size: 0.8rem;
+    text-decoration: underline;
+    font-weight: 600;
+}

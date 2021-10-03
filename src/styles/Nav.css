@@ -1,0 +1,29 @@
+.nav {
+    height: 55px;
+    /* border-bottom: 1px solid var(--black-col); */
+    box-shadow: 0 8px 10px 0 var(--light-gray);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+.nav .logo {
+    display: flex;
+    align-items: center;
+}
+
+.nav .logo .logoText {
+    margin-left: 15px;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+.nav .right {
+    display: flex;
+}
+
+.nav .right .account {
+    margin: 0 15px;
+}
+

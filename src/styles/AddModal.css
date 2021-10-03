@@ -1,0 +1,15 @@
+.compulsory {
+    color: var(--red-col);
+}
+
+#supportingFiles::-webkit-file-upload-button {
+    outline: none;
+    border: none;
+    height: 100%;
+    color: var(--auth-accent-hover)
+}
+
+#supportingFiles::-webkit-file-upload-button:hover {
+    cursor: pointer;
+    color: var(--auth-accent)
+}

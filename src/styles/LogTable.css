@@ -1,0 +1,31 @@
+.logTable {
+    margin: 100px;
+    overflow-x: scroll;
+}
+
+.logTable::-webkit-scrollbar {
+    height: 8px;
+}
+
+.logTable::-webkit-scrollbar-track {
+    border-radius: 20px;
+    background: var(--light-gray); /* color of the tracking area */
+}
+
+.logTable::-webkit-scrollbar-thumb {
+    background-color: var(--black-col); /* color of the scroll thumb */
+    border-radius: 20px; /* roundness of the scroll thumb */
+    border: 2px solid var(--light-gray); /* creates padding around scroll thumb */
+}
+
+.logTable .table .tableBody .tableRow:hover {
+    cursor: pointer;
+    background-color: var(--light-gray); /* color of the scroll thumb */
+}
+
+/* Responsiveness */
+@media only screen and (max-width: 700px) {
+    .logTable {
+        margin: 100px 20px;
+    }
+}

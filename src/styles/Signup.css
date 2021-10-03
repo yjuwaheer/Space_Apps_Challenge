@@ -7,10 +7,12 @@
 }
 
 .container .signup {
+    position: relative;
     background: var(--white-col);
     padding: 20px;
     border-radius: 15px;
     width: 300px;
+    z-index: 1;
 }
 
 .container .signup .mainText {
@@ -140,4 +142,14 @@
     font-size: 0.8rem;
     text-decoration: underline;
     font-weight: 600;
+}
+
+.container .signup .logo {
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    width: 80px;
+    border-radius: 15px;
+    opacity: 0.8;
+    z-index: -1;
 }

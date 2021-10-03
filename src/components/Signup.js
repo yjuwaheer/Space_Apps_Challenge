@@ -128,6 +128,8 @@ const Signup = () => {
                         Login
                     </Link>
                 </div>
+
+                <img src="./Logo.png" alt="logo" className="logo" />
             </form>
         </div>
     );

@@ -40,7 +40,7 @@ const Login = () => {
             await login(emailRef.current.value, passwordRef.current.value);
             history.push("/home");
         } catch (error) {
-            toast.error(error.message.split('Firebase: ')[1], {
+            toast.error(error.message.split("Firebase: ")[1], {
                 position: "bottom-center",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -77,6 +77,8 @@ const Login = () => {
                         Sign up
                     </Link>
                 </div>
+
+                <img src="./Logo.png" alt="logo" className="logo" />
             </form>
         </div>
     );

@@ -141,17 +141,31 @@ const Filters = ({
                             </InputGroup>
                         </div>
                     </div>
-                    <Button
-                        colorScheme="blackAlpha"
-                        variant="outline"
-                        mt={2}
-                        onClick={() => setFiltering((prev) => !prev)}
-                    >
-                        <span className="material-icons material-icons-outlined">
-                            sort
-                        </span>
-                        Filter
-                    </Button>
+                    <div className="actions">
+                        <Button
+                            colorScheme="blackAlpha"
+                            variant="outline"
+                            mt={2}
+                            onClick={() => setFiltering((prev) => !prev)}
+                        >
+                            <span className="material-icons material-icons-outlined">
+                                filter_alt
+                            </span>
+                            Filter
+                        </Button>
+                        <Button
+                            colorScheme="blackAlpha"
+                            variant="outline"
+                            ml={1}
+                            mt={2}
+                            onClick={() => setFiltering((prev) => !prev)}
+                        >
+                            <span className="material-icons material-icons-outlined">
+                                clear_all
+                            </span>
+                            Clear All
+                        </Button>
+                    </div>
                 </>
             )}
         </div>

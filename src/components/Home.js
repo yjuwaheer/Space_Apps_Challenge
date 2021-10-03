@@ -19,6 +19,11 @@ const Home = () => {
         <div className="home">
             <Nav />
             <Filters
+                time={time}
+                author={author}
+                entryT={entryT}
+                logE={logE}
+                tags={tags}
                 setFiltering={setFiltering}
                 setTime={setTime}
                 setAuthor={setAuthor}

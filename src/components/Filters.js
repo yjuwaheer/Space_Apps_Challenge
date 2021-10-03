@@ -17,6 +17,11 @@ Filter by
 -author
 */
 const Filters = ({
+    time,
+    author,
+    entryT,
+    logE,
+    tags,
     setFiltering,
     setTime,
     setAuthor,
@@ -26,6 +31,17 @@ const Filters = ({
 }) => {
     // States
     const [collapseFilters, setCollapseFilters] = useState(false);
+
+    // Function to handle clearing all the filters
+    const resetAllFilters = () => {
+        setTime("");
+        setAuthor("");
+        setEntryT("");
+        setLogE("");
+        setTags("");
+
+        setFiltering((prev) => !prev);
+    };
 
     return (
         <div className="filters">
@@ -55,6 +71,7 @@ const Filters = ({
                                 onChange={(e) => {
                                     setTime(e.target.value);
                                 }}
+                                value={time}
                             >
                                 <option value="newestfirst">
                                     Newest First
@@ -80,6 +97,7 @@ const Filters = ({
                                     onChange={(e) => {
                                         setAuthor(e.target.value);
                                     }}
+                                    value={author}
                                 />
                             </InputGroup>
                         </div>
@@ -99,6 +117,7 @@ const Filters = ({
                                     onChange={(e) => {
                                         setEntryT(e.target.value);
                                     }}
+                                    value={entryT}
                                 />
                             </InputGroup>
                         </div>
@@ -118,6 +137,7 @@ const Filters = ({
                                     onChange={(e) => {
                                         setLogE(e.target.value);
                                     }}
+                                    value={logE}
                                 />
                             </InputGroup>
                         </div>
@@ -137,6 +157,7 @@ const Filters = ({
                                     onChange={(e) => {
                                         setTags(e.target.value);
                                     }}
+                                    value={tags}
                                 />
                             </InputGroup>
                         </div>
@@ -158,7 +179,7 @@ const Filters = ({
                             variant="outline"
                             ml={1}
                             mt={2}
-                            onClick={() => setFiltering((prev) => !prev)}
+                            onClick={() => resetAllFilters()}
                         >
                             <span className="material-icons material-icons-outlined">
                                 clear_all

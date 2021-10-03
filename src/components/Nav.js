@@ -77,7 +77,7 @@ const Nav = () => {
                         </Button>
                     </Tooltip>
 
-                    <Button
+                    {/* <Button
                         className="account"
                         colorScheme="gray"
                         variant="outline"
@@ -85,7 +85,7 @@ const Nav = () => {
                         <span className="material-icons material-icons-outlined">
                             account_circle
                         </span>
-                    </Button>
+                    </Button> */}
 
                     <Button
                         className="logout"

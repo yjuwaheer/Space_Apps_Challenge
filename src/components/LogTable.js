@@ -25,10 +25,18 @@ import {
     Td,
     TableCaption,
 } from "@chakra-ui/react";
+// Chakra Modal
+import { useDisclosure } from "@chakra-ui/react";
+import LogModal from "./LogModal";
 
 const LogTable = ({ filtering, time, author, entryT, logE, tags }) => {
     // States
+    const [loading, setLoading] = useState(false);
     const [logs, setLogs] = useState([]);
+    const [currentLog, setCurrentLog] = useState("dummyiddata");
+
+    // Chakra modal hooks
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     // Get all logs to display
     useEffect(() => {
@@ -42,6 +50,7 @@ const LogTable = ({ filtering, time, author, entryT, logE, tags }) => {
                 // console.log(snapshot.docs);
 
                 snapshot.docChanges().forEach((change) => {
+                    console.log(change)
                     // First condition checks that the previously||newly added logs does not have pending writes
                     if (
                         !change.doc.metadata.hasPendingWrites &&
@@ -118,12 +127,14 @@ const LogTable = ({ filtering, time, author, entryT, logE, tags }) => {
             setLogs((prev) => [...prev, { id: logId, data: docSnap.data() }]);
         }
         if (eventType === "modified") {
+            console.log("modified")
             setLogs((prev) => [{ id: logId, data: docSnap.data() }, ...prev]);
         }
     };
 
     return (
         <>
+            <LogModal isOpen={isOpen} onClose={onClose} currentLog={currentLog} />
             {/* Log Table */}
             <div className="logTable">
                 <Table className="table" variant="simple">
@@ -142,9 +153,29 @@ const LogTable = ({ filtering, time, author, entryT, logE, tags }) => {
                         </Tr>
                     </Thead>
                     <Tbody className="tableBody">
+                        {logs.length === 0 && (
+                            <Tr className="tableRow">
+                                <Td></Td>
+                                <Td></Td>
+                                <Td>
+                                    <Badge colorScheme="blue">
+                                        No logs available.
+                                    </Badge>
+                                </Td>
+                                <Td></Td>
+                                <Td></Td>
+                            </Tr>
+                        )}
                         {logs &&
                             logs.map((log) => (
-                                <Tr className="tableRow" key={log.id}>
+                                <Tr
+                                    className="tableRow"
+                                    key={log.id}
+                                    onClick={() => {
+                                        setCurrentLog(log.id);
+                                        onOpen();
+                                    }}
+                                >
                                     <Td>{log.data.author}</Td>
                                     <Td>{log.data.entryTopic}</Td>
                                     <Td>{log.data.logEntry}</Td>

@@ -74,7 +74,7 @@ const AddModal = ({ isOpen, onClose }) => {
                 setUsername(query.data().username);
             });
         };
-        getUsername();
+        currentUser && getUsername();
     }, [currentUser]);
 
     // Function to handle adding new field

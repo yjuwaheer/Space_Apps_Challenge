@@ -1,9 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/AddModal.css";
 // Firebase Config
 import { db, storage, serverTimestamp } from "../FirebaseConfig";
 // Firebase Firestore Library
-import { collection, addDoc, doc, updateDoc } from "firebase/firestore";
+import {
+    collection,
+    getDocs,
+    query,
+    where,
+    addDoc,
+    doc,
+    updateDoc,
+} from "firebase/firestore";
 // Firebase Storage Library
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 // Chakra Components
@@ -26,6 +34,8 @@ import {
     ModalBody,
     ModalCloseButton,
 } from "@chakra-ui/react";
+// Auth
+import { useAuth } from "../contexts/AuthContext";
 // Taglist Compoment
 import ReactTagInput from "@pathofdev/react-tag-input";
 import "@pathofdev/react-tag-input/build/index.css";
@@ -33,6 +43,9 @@ import "@pathofdev/react-tag-input/build/index.css";
 import { toast } from "react-toastify";
 
 const AddModal = ({ isOpen, onClose }) => {
+    // Auth
+    const { currentUser } = useAuth();
+
     // States
     const [newFields, setNewFields] = useState([]);
     const [entryTopic, setEntryTopic] = useState("");
@@ -43,7 +56,26 @@ const AddModal = ({ isOpen, onClose }) => {
     const [newFieldName, setNewFieldName] = useState("");
     const [newFieldText, setNewFieldText] = useState("");
 
+    const [username, setUsername] = useState("");
     const [loading, setLoading] = useState(false);
+
+    // useEffect to get current user name
+    useEffect(() => {
+        const getUsername = async () => {
+            const usersRef = collection(db, "users");
+            const que = query(
+                usersRef,
+                where("email", "==", currentUser.email)
+            );
+
+            const querySnapshot = await getDocs(que);
+            querySnapshot.forEach((query) => {
+                // doc.data() is never undefined for query doc snapshots
+                setUsername(query.data().username);
+            });
+        };
+        getUsername();
+    }, [currentUser]);
 
     // Function to handle adding new field
     const handleAddNewField = () => {
@@ -139,6 +171,7 @@ const AddModal = ({ isOpen, onClose }) => {
 
         // Save log to firestore
         const docRef = await addDoc(collection(db, "logs"), {
+            author: username,
             timestamp: serverTimestamp(),
             entryTopic: entryTopic,
             logEntry: logEntry,
@@ -162,7 +195,6 @@ const AddModal = ({ isOpen, onClose }) => {
                 draggable: true,
                 progress: undefined,
             });
-            return;
         } else {
             // "Supporting files."
             // console.log(docRef.path.split("/")[1]);

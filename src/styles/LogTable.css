@@ -26,6 +26,6 @@
 /* Responsiveness */
 @media only screen and (max-width: 700px) {
     .logTable {
-        margin: 100px 20px;
+        margin: 50px 20px;
     }
 }

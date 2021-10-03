@@ -1,5 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/LogTable.css";
+// Firebase Config
+import { db } from "../FirebaseConfig";
+// Firebase Firestore Library
+import {
+    collection,
+    onSnapshot,
+    doc,
+    getDoc,
+    serverTimestamp,
+} from "firebase/firestore";
 // Chakra Components
 import { Badge, Tag } from "@chakra-ui/react";
 import {
@@ -14,6 +24,35 @@ import {
 } from "@chakra-ui/react";
 
 const LogTable = () => {
+    // States
+    const [logs, setLogs] = useState([]);
+
+    // Get all logs to display
+    useEffect(() => {
+        const getLogsId = () => {
+            onSnapshot(collection(db, "logs"), (snapshot) => {
+                // console.log(snapshot.docs);
+
+                snapshot.docChanges().forEach((change) => {
+                    // First condition checks that the previously||newly added logs does not have pending writes
+                    if (!change.doc.metadata.hasPendingWrites || change.type === "modified") {
+                        getLogData(change.doc.id);
+                    }
+                });
+            });
+        };
+
+        getLogsId();
+    }, []);
+
+    // Fetch all the logs data from firestore
+    const getLogData = async (logId) => {
+        const docRef = doc(db, "logs", logId);
+        const docSnap = await getDoc(docRef);
+
+        setLogs((prev) => [...prev, { id: logId, data: docSnap.data() }]);
+    };
+
     return (
         <>
             {/* Log Table */}
@@ -34,60 +73,35 @@ const LogTable = () => {
                         </Tr>
                     </Thead>
                     <Tbody className="tableBody">
-                        <Tr className="tableRow">
-                            <Td>John Doe</Td>
-                            <Td>Upgrade</Td>
-                            <Td>Installing upgrade at EV1</Td>
-                            <Td>
-                                <Tag
-                                    size="sm"
-                                    variant="solid"
-                                    colorScheme="teal"
-                                >
-                                    Upgrade
-                                </Tag>
-                            </Td>
-                            <Td>
-                                <div className="date">2 Oct, 2021</div>
-                                <div className="date">18:14</div>
-                            </Td>
-                        </Tr>
-                        <Tr className="tableRow">
-                            <Td>John Doe</Td>
-                            <Td>Upgrade</Td>
-                            <Td>Installing upgrade at EV1</Td>
-                            <Td>
-                                <Tag
-                                    size="sm"
-                                    variant="solid"
-                                    colorScheme="teal"
-                                >
-                                    Upgrade
-                                </Tag>
-                            </Td>
-                            <Td>
-                                <div className="date">2 Oct, 2021</div>
-                                <div className="date">18:14</div>
-                            </Td>
-                        </Tr>
-                        <Tr className="tableRow">
-                            <Td>John Doe</Td>
-                            <Td>Upgrade</Td>
-                            <Td>Installing upgrade at EV1</Td>
-                            <Td>
-                                <Tag
-                                    size="sm"
-                                    variant="solid"
-                                    colorScheme="teal"
-                                >
-                                    Upgrade
-                                </Tag>
-                            </Td>
-                            <Td>
-                                <div className="date">2 Oct, 2021</div>
-                                <div className="date">18:14</div>
-                            </Td>
-                        </Tr>
+                        {logs &&
+                            logs.map((log) => (
+                                <Tr className="tableRow" key={log.id}>
+                                    <Td>{log.data.author}</Td>
+                                    <Td>{log.data.entryTopic}</Td>
+                                    <Td>{log.data.logEntry}</Td>
+                                    <Td>
+                                        {log.data.tags &&
+                                            log.data.tags.map((tag) => (
+                                                <Tag
+                                                    size="sm"
+                                                    variant="solid"
+                                                    colorScheme="teal"
+                                                    key={tag}
+                                                >
+                                                    {tag}
+                                                </Tag>
+                                            ))}
+                                    </Td>
+                                    <Td>
+                                        <div className="dateTime">
+                                            {log.data.timestamp &&
+                                                log.data.timestamp
+                                                    .toDate()
+                                                    .toLocaleString()}
+                                        </div>
+                                    </Td>
+                                </Tr>
+                            ))}
                     </Tbody>
                     <Tfoot>
                         <Tr>

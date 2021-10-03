@@ -11,4 +11,13 @@
 
 .filters .attributes {
     display: flex;
+    flex-direction: row;
+}
+
+/* Responsiveness */
+@media only screen and (max-width: 775px) {
+    .filters .attributes {
+        display: flex;
+        flex-direction: column;
+    }
 }

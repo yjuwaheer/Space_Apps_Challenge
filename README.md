@@ -1,7 +1,8 @@
 # TODO
-[*] Add username in signup and also to firestore.\
-[*] Filter functionality.\
-[*] Modal for log.\
+[x] Add username in signup and also to firestore.\
+[x] Filter functionality.\
+[x] Modal for log.\
+[] Bug for real time update.\
 [] Single Page for log.\
 [] User Account update functionality.
 

@@ -40,6 +40,7 @@ const LogTable = ({ filtering, time, author, entryT, logE, tags }) => {
 
     // Get all logs to display
     useEffect(() => {
+        let initialLoad = true;
         const getLogsId = () => {
             // By default (newest first)
             const que = query(
@@ -56,6 +57,9 @@ const LogTable = ({ filtering, time, author, entryT, logE, tags }) => {
                         !change.doc.metadata.hasPendingWrites &&
                         change.type === "added"
                     ) {
+                        if (initialLoad) {
+                            return;
+                        }
                         getLogData(change.doc.id, "added");
                     }
 

@@ -40,8 +40,7 @@ const LogTable = ({ filtering, time, author, entryT, logE, tags }) => {
 
     // Get all logs to display
     useEffect(() => {
-        let initialLoad = true;
-        const getLogsId = () => {
+        const getLogsId = (initialLoad = false) => {
             // By default (newest first)
             const que = query(
                 collection(db, "logs"),
@@ -54,7 +53,6 @@ const LogTable = ({ filtering, time, author, entryT, logE, tags }) => {
                     console.log(change)
                     // First condition checks that the previously||newly added logs does not have pending writes
                     if (
-                        !change.doc.metadata.hasPendingWrites &&
                         change.type === "added"
                     ) {
                         if (initialLoad) {
@@ -70,7 +68,7 @@ const LogTable = ({ filtering, time, author, entryT, logE, tags }) => {
             });
         };
 
-        getLogsId();
+        getLogsId(true);
     }, []);
 
     // Get all logs to display

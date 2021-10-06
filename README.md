@@ -6,6 +6,11 @@
 [] Single Page for log.\
 [] User Account update functionality.
 
+## About
+
+This project was made during the 2021 Space Apps Challenge.\
+React was used as frontend and Firebase as backend.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
